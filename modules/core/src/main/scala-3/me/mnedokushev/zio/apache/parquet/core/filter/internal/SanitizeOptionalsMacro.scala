@@ -33,6 +33,8 @@ object SanitizeOptionalsMacro {
           containsOptionalValue(tpe)
         case TypeRef(_, name)    =>
           List("Option", "Some", "None").contains(name)
+        case _                   =>
+          false
       }
 
     if (containsOptionalValue(TypeRepr.of[A]))
