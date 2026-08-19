@@ -61,6 +61,12 @@ lazy val core =
       undeclaredCompileDependenciesFilter -= DependencyFilter.moduleFilter("dev.zio", "zio-stacktracer"),
       tpolecatSettings,
       libraryDependencies ++= Dep.core,
+      libraryDependencies ++= {
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, _)) => Seq(Dep.scalaReflect.value)
+          case _            => Seq.empty
+        }
+      },
       testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
     )
 
