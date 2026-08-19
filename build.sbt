@@ -1,4 +1,5 @@
 import BuildHelper._
+import sbt.librarymanagement.DependencyFilter
 import org.typelevel.scalacoptions.ScalacOptions
 
 inThisBuild(
@@ -57,6 +58,7 @@ lazy val core =
     .in(file("modules/core"))
     .settings(
       stdSettings("core"),
+      undeclaredCompileDependenciesFilter -= DependencyFilter.moduleFilter("dev.zio", "zio-stacktracer"),
       tpolecatSettings,
       libraryDependencies ++= Dep.core,
       testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
@@ -70,6 +72,8 @@ lazy val hadoop =
       Test / exportJars := false,
       Test / fork := false,
       Test / closeClassLoaders := false,
+      undeclaredCompileDependenciesFilter -= DependencyFilter.moduleFilter("dev.zio", "izumi-reflect"),
+      undeclaredCompileDependenciesFilter -= DependencyFilter.moduleFilter("dev.zio", "zio-stacktracer"),
       tpolecatSettings,
       libraryDependencies ++= Dep.hadoop,
       testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
