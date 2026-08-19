@@ -61,6 +61,9 @@ lazy val hadoop =
     .in(file("modules/hadoop"))
     .settings(
       stdSettings("hadoop"),
+      Test / exportJars := false,
+      Test / fork := false,
+      Test / closeClassLoaders := false,
       tpolecatSettings,
       libraryDependencies ++= Dep.hadoop,
       testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
