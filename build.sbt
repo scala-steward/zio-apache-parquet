@@ -1,23 +1,23 @@
 import BuildHelper._
+import sbt.librarymanagement.DependencyFilter
 import org.typelevel.scalacoptions.ScalacOptions
 
 inThisBuild(
   List(
-    name                                := "ZIO Apache Parquet",
     organization                        := "me.mnedokushev",
-    homepage                            := Some(url("https://github.com/grouzen/zio-apache-parquet")),
-    licenses                            := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    homepage                            := Some(uri("https://github.com/grouzen/zio-apache-parquet")),
+    licenses                            := List("Apache-2.0" -> uri("http://www.apache.org/licenses/LICENSE-2.0")),
     developers                          := List(
       Developer(
         "grouzen",
         "Mykhailo Nedokushev",
         "michael.nedokushev@gmail.com",
-        url("https://github.com/grouzen")
+        uri("https://github.com/grouzen")
       )
     ),
     scmInfo                             := Some(
       ScmInfo(
-        url("https://github.com/grouzen/zio-apache-parquet"),
+        uri("https://github.com/grouzen/zio-apache-parquet"),
         "scm:git:git@github.com:grouzen/zio-apache-parquet.git"
       )
     ),
@@ -32,6 +32,13 @@ inThisBuild(
           "scalafmtCheckAll"
         ),
         name = Some("Lint Scala code")
+      ),
+      WorkflowStep.Sbt(
+        List(
+          "all undeclaredCompileDependenciesTest",
+          "all unusedCompileDependenciesTest"
+        ),
+        name = Some("Check explicit dependencies")
       )
     )
   )
@@ -51,8 +58,15 @@ lazy val core =
     .in(file("modules/core"))
     .settings(
       stdSettings("core"),
+      undeclaredCompileDependenciesFilter -= DependencyFilter.moduleFilter("dev.zio", "zio-stacktracer"),
       tpolecatSettings,
       libraryDependencies ++= Dep.core,
+      libraryDependencies ++= {
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, _)) => Seq(Dep.scalaReflect.value)
+          case _            => Seq.empty
+        }
+      },
       testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
     )
 
@@ -61,6 +75,11 @@ lazy val hadoop =
     .in(file("modules/hadoop"))
     .settings(
       stdSettings("hadoop"),
+      Test / exportJars := false,
+      Test / fork := false,
+      Test / closeClassLoaders := false,
+      undeclaredCompileDependenciesFilter -= DependencyFilter.moduleFilter("dev.zio", "izumi-reflect"),
+      undeclaredCompileDependenciesFilter -= DependencyFilter.moduleFilter("dev.zio", "zio-stacktracer"),
       tpolecatSettings,
       libraryDependencies ++= Dep.hadoop,
       testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
