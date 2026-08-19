@@ -4,7 +4,7 @@ import scalafix.sbt.ScalafixPlugin.autoImport.scalafixSemanticdb
 
 object BuildHelper {
 
-  def stdSettings(projectName: String): Seq[Def.Setting[_]] = Seq(
+  def stdSettings(projectName: String): Seq[Def.Setting[?]] = Seq(
     name              := s"zio-apache-parquet-$projectName",
     organization      := "me.mnedokushev",
     libraryDependencies ++= betterMonadicFor(scalaVersion.value),

@@ -3,21 +3,20 @@ import org.typelevel.scalacoptions.ScalacOptions
 
 inThisBuild(
   List(
-    name                                := "ZIO Apache Parquet",
     organization                        := "me.mnedokushev",
-    homepage                            := Some(url("https://github.com/grouzen/zio-apache-parquet")),
-    licenses                            := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    homepage                            := Some(uri("https://github.com/grouzen/zio-apache-parquet")),
+    licenses                            := List("Apache-2.0" -> uri("http://www.apache.org/licenses/LICENSE-2.0")),
     developers                          := List(
       Developer(
         "grouzen",
         "Mykhailo Nedokushev",
         "michael.nedokushev@gmail.com",
-        url("https://github.com/grouzen")
+        uri("https://github.com/grouzen")
       )
     ),
     scmInfo                             := Some(
       ScmInfo(
-        url("https://github.com/grouzen/zio-apache-parquet"),
+        uri("https://github.com/grouzen/zio-apache-parquet"),
         "scm:git:git@github.com:grouzen/zio-apache-parquet.git"
       )
     ),
