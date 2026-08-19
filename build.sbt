@@ -31,6 +31,13 @@ inThisBuild(
           "scalafmtCheckAll"
         ),
         name = Some("Lint Scala code")
+      ),
+      WorkflowStep.Sbt(
+        List(
+          "all undeclaredCompileDependenciesTest",
+          "all unusedCompileDependenciesTest"
+        ),
+        name = Some("Check explicit dependencies")
       )
     )
   )
